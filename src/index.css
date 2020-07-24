@@ -1,0 +1,31 @@
+body {
+  margin: 0;
+  font-family: "Roboto", sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  border: 1px solid rgb(65, 4, 65);
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  outline: none;
+  background-color: transparent;
+  width: 100%;
+  font-size: 18px;
+}
+
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="password"]::placeholder {
+  color: rgb(65, 4, 65);
+  font-size: 14px;
+}
+
+/* code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+} */

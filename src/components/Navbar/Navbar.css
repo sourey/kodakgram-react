@@ -1,0 +1,47 @@
+.navbar {
+  height: 50px;
+  width: 100%;
+  /* background: rgb(63, 94, 251);
+  background: linear-gradient(
+    90deg,
+    rgb(255, 255, 255) 0%,
+    rgb(255, 206, 206) 100%
+  ); */
+  background-color: #376e6f;
+}
+
+.navbar-logo {
+  margin-left: 100px;
+  padding: 2px 2px;
+}
+
+.logo-text {
+  margin-left: 10px;
+  font-weight: bolder;
+  font-size: 18px;
+  position: absolute;
+  margin-top: 12px;
+  color: white;
+}
+.nav-profile {
+  float: right;
+  padding: 5px 5px;
+  margin-right: 100px;
+}
+.navbar-profile {
+  margin-left: 15px;
+  margin-bottom: 28px;
+}
+
+.hover-icon:hover {
+  transform: scale(1.1);
+  transition: 0.1s linear 0.1s;
+  cursor: pointer;
+}
+
+.menu-item {
+  color: white !important;
+}
+.menu-item:hover {
+  color: black !important;
+}

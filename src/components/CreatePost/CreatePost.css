@@ -1,0 +1,19 @@
+.create-post {
+  margin-top: 10px;
+  padding: 5px 10px;
+  height: 150px;
+  width: auto;
+  border-radius: 5px 5px 0px 0px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.create-post-button {
+  float: right;
+  margin-top: 100px;
+}
+
+.button-color {
+  background-color: #ffc4e7;
+  border-radius: 20px;
+  padding: 6px !important;
+}
