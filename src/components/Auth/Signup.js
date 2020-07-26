@@ -3,16 +3,6 @@ import "./Signup.css";
 import Button from "./../Button/Button";
 
 class Signup extends Component {
-  state = { loginForm: false };
-
-  handleLoginClick = (e) => {
-    e.preventDefault();
-    if (this.state.loginForm === false) {
-      this.setState({ loginForm: true });
-    } else {
-    }
-  };
-
   render() {
     return (
       <div className="login-page">
@@ -25,7 +15,7 @@ class Signup extends Component {
         </div>
         <div className="form-container">
           <div className="form-title">
-            {this.state.loginForm ? "Login" : "Signup"}
+            {this.props.loginForm ? "Login" : "Signup"}
           </div>
           <hr
             style={{
@@ -33,12 +23,13 @@ class Signup extends Component {
               marginBottom: "18px",
             }}
           />
-          <form>
-            {this.state.loginForm ? null : (
+          <form onSubmit={this.props.handleSignUp}>
+            {this.props.loginForm ? null : (
               <div className="form-element">
                 <input
                   type="text"
                   name="name"
+                  value={this.props.name}
                   placeholder="name"
                   onChange={this.props.handleChange}
                 />
@@ -48,15 +39,17 @@ class Signup extends Component {
               <input
                 type="text"
                 name="username"
+                value={this.props.username}
                 placeholder="username"
                 onChange={this.props.handleChange}
               />
             </div>
-            {this.state.loginForm ? null : (
+            {this.props.loginForm ? null : (
               <div className="form-element">
                 <input
                   type="email"
                   name="email"
+                  value={this.props.email}
                   placeholder="email"
                   onChange={this.props.handleChange}
                 />
@@ -66,32 +59,37 @@ class Signup extends Component {
               <input
                 type="password"
                 name="password"
+                value={this.props.password}
                 placeholder="password"
                 onChange={this.props.handleChange}
               />
             </div>
-            {this.state.loginForm ? null : (
+            {this.props.loginForm ? null : (
               <div className="signup">
-                <Button text="SignUp" />
+                <Button text="SignUp" type="submit" />
               </div>
             )}
             <div className="signup">
-              {this.state.loginForm ? null : (
+              {this.props.loginForm ? null : (
                 <div style={{ marginTop: "20px" }}>Already SignedUp?</div>
               )}
               <div style={{ marginTop: "10px" }}>
                 <Button
                   text={
-                    this.props.isLogging ? <div class="loader"></div> : "Login"
+                    this.props.isLogging ? (
+                      <div className="loader"></div>
+                    ) : (
+                      "Login"
+                    )
                   }
                   onClick={
-                    !this.state.loginForm
-                      ? this.handleLoginClick
+                    !this.props.loginForm
+                      ? this.props.handleLoginClick
                       : (e) => this.props.handleLogin(e)
                   }
                 />
               </div>
-              {this.state.loginForm ? (
+              {this.props.loginForm ? (
                 <div
                   style={{
                     marginTop: "45px",
@@ -101,10 +99,8 @@ class Signup extends Component {
                 >
                   <Button
                     text="Go Back"
-                    onClick={(e) => {
-                      this.setState({ loginForm: false });
-                    }}
-                    disabled={this.state.isLogging}
+                    onClick={this.props.handleGoBack}
+                    disabled={this.props.isLogging}
                   />
                 </div>
               ) : null}

@@ -1,9 +1,17 @@
-.feed {
-  display: grid;
-  grid-template-columns: 2fr 8fr 1fr;
-}
 .feed-container {
+  /* background-color: #376e6f; */
+  padding: 5px 5px !important;
+  margin-left: 105px !important;
+  margin-top: 10px !important;
+}
+
+.ant-card-head {
+  padding: 3px !important;
+  margin-top: -15px !important;
+}
+.username {
   position: relative;
-  /* height: 100vh; */
-  background-color: rgb(255, 255, 255);
+  top: 2px;
+  margin-left: 5px;
+  padding: 5px 5px;
 }

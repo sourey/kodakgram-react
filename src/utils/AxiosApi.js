@@ -1,7 +1,9 @@
 import axios from "axios";
-import { headers, URL } from "./Constants";
 
 export const axiosGet = (url, successCallback, failureCallback) => {
+  const headers = {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  };
   axios
     .get(url, { headers })
     .then(
@@ -20,6 +22,9 @@ export const axiosGet = (url, successCallback, failureCallback) => {
 };
 
 export const axiosPost = (url, params, successCallback, failureCallback) => {
+  const headers = {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  };
   let doPost =
     url === URL.login
       ? axios.post(url, params)
@@ -42,19 +47,3 @@ const thenCatchPost = (doPost, successCallback, failureCallback) => {
         }
     );
 };
-
-// const thenCatchGet = (doGet, successCallback, failureCallback) => {
-//   doGet
-//     .then(
-//       successCallback ||
-//         function (response) {
-//           console.log(response);
-//         }
-//     )
-//     .catch(
-//       failureCallback ||
-//         function (error) {
-//           console.log(error);
-//         }
-//     );
-// };

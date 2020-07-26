@@ -4,36 +4,42 @@ import { HomeOutlined, UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Row, Col, Menu, Dropdown } from "antd";
 import { Link } from "react-router-dom";
 
-const menu = (
-  <Menu
-    style={{
-      backgroundColor: "#376e6f",
-      marginTop: "13px",
-      borderRadius: "2px",
-    }}
-  >
-    <Menu.Item className="menu-item">
-      <Link to="/profile" className="menu-item">
-        Profile
-        <UserOutlined style={{ marginLeft: "10px", fontSize: "14px" }} />
-      </Link>
-    </Menu.Item>
-    <Menu.Item className="menu-item">
-      <span
-        onClick={() => {
-          localStorage.clear();
-          window.location.reload();
-        }}
-      >
-        Logout
-        <LogoutOutlined style={{ marginLeft: "10px", fontSize: "14px" }} />
-      </span>
-    </Menu.Item>
-  </Menu>
-);
-
 class Navbar extends Component {
   state = {};
+
+  renderMenu = () => {
+    return (
+      <Menu
+        style={{
+          backgroundColor: "#376e6f",
+          marginTop: "13px",
+          borderRadius: "2px",
+        }}
+      >
+        <Menu.Item className="menu-item">
+          <Link
+            to={`/profile/${localStorage.getItem("username")}`}
+            className="menu-item"
+          >
+            Profile
+            <UserOutlined style={{ marginLeft: "10px", fontSize: "14px" }} />
+          </Link>
+        </Menu.Item>
+        <Menu.Item className="menu-item">
+          <span
+            onClick={() => {
+              localStorage.clear();
+              window.location.reload();
+            }}
+          >
+            Logout
+            <LogoutOutlined style={{ marginLeft: "10px", fontSize: "14px" }} />
+          </span>
+        </Menu.Item>
+      </Menu>
+    );
+  };
+
   render() {
     return (
       <div className="navbar">
@@ -64,16 +70,11 @@ class Navbar extends Component {
                   </Link>
                 </Col>
                 <Col md={8}>
-                  <Dropdown overlay={menu}>
-                    {/* <a
-                      className="ant-dropdown-link"
-                      onClick={(e) => e.preventDefault()}
-                    > */}
+                  <Dropdown overlay={this.renderMenu()}>
                     <UserOutlined
                       style={{
                         fontSize: "24px",
                         marginRight: "20px",
-                        color: "black",
                         marginTop: "6px",
                         color: "white",
                       }}

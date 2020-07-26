@@ -1,5 +1,8 @@
 body {
   margin: 0;
+  padding: 0;
+  max-width: 100%;
+  height: auto;
   font-family: "Roboto", sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
