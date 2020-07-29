@@ -18,7 +18,12 @@ class Navbar extends Component {
       >
         <Menu.Item className="menu-item">
           <Link
-            to={`/profile/${localStorage.getItem("username")}`}
+            to={{
+              pathname: `/profile/${localStorage.getItem("username")}`,
+              state: {
+                userId: localStorage.getItem("userId"),
+              },
+            }}
             className="menu-item"
           >
             Profile

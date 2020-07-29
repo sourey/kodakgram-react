@@ -29,3 +29,16 @@
   font-size: 16px;
   font-weight: bold;
 }
+
+.save-button {
+  background-color: #376e6f !important;
+  border-color: #376e6f !important;
+  margin-top: 25px;
+  margin-left: 11px;
+}
+
+.cancel-button {
+  background-color: #70295b !important;
+  border-color: #70295b !important;
+  margin-top: 5px;
+}

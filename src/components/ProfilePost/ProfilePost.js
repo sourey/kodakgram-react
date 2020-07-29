@@ -22,7 +22,7 @@ class ProfilePost extends Component {
               <img src={Woman2} height="300" width="280" />
             </Col>
           </Row>
-          <Row style={{ marginBottom: "5px" }}>
+          <Row>
             <Col md={8}>
               <img src={Man1} height="300" width="280" />
             </Col>

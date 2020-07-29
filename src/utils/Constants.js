@@ -13,4 +13,5 @@ export const URL = {
   getProfile: `${server}/profile/`,
   getPosts: `${server}/post/`,
   insertPost: `${server}/post/insert`,
+  updateProfile: `${server}/profile/update`,
 };

@@ -106,7 +106,7 @@ class App extends Component {
           <Route
             exact
             path="/"
-            render={() =>
+            render={(props) =>
               this.state.isLoggedIn === false ? (
                 <Signup
                   handleLogin={this.handleLogin}
@@ -124,7 +124,7 @@ class App extends Component {
           <PrivateRoute
             authed={this.state.isLoggedIn}
             user={this.state.user}
-            path="/profile:username?"
+            path="/profile/:username"
             component={Profile}
           />
           <PrivateRoute

@@ -46,6 +46,7 @@ class CreatePost extends Component {
       axiosPost(URL.insertPost, formData, (response) => {
         if (response.status === 200) {
           message.success("Post saved.");
+          this.setState({ modalVisible: false });
         }
       });
     } else {
