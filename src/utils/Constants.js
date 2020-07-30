@@ -13,5 +13,10 @@ export const URL = {
   getProfile: `${server}/profile/`,
   getPosts: `${server}/post/`,
   insertPost: `${server}/post/insert`,
+  deletePost: `${server}/post/delete`,
   updateProfile: `${server}/profile/update`,
+  getAllUsers: `${server}/all`,
+  follow: `${server}/followers/follow`,
+  unfollow: `${server}/followers/unfollow`,
+  getProfileStats: `${server}/profile/stats`,
 };

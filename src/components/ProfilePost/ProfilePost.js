@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import { Row, Col } from "antd";
-import Man1 from "../../assets/images/man1.jpg";
-import Woman2 from "../../assets/images/woman2.jpg";
-import Woman3 from "../../assets/images/woman3.jpg";
+import { Row, Col, Empty } from "antd";
+import { server } from "../../utils/Constants";
 
 class ProfilePost extends Component {
   state = {};
@@ -11,28 +9,24 @@ class ProfilePost extends Component {
       <Row>
         <Col md={4}></Col>
         <Col md={16} style={{ marginTop: "5px", padding: "5px 5px" }}>
-          <Row style={{ marginBottom: "15px" }}>
-            <Col md={8}>
-              <img src={Man1} height="300" width="280" />
-            </Col>
-            <Col md={8}>
-              <img src={Woman3} height="300" width="280" />
-            </Col>
-            <Col md={8}>
-              <img src={Woman2} height="300" width="280" />
-            </Col>
-          </Row>
-          <Row>
-            <Col md={8}>
-              <img src={Man1} height="300" width="280" />
-            </Col>
-            <Col md={8}>
-              <img src={Woman3} height="300" width="280" />
-            </Col>
-            <Col md={8}>
-              <img src={Woman2} height="300" width="280" />
-            </Col>
-          </Row>
+          {this.props.posts.length > 0 ? (
+            <Row>
+              {this.props.posts.map((post) => (
+                <Col md={8} style={{ marginBottom: "15px" }} key={post.postId}>
+                  <img
+                    src={`${server}/files/${post.image}`}
+                    height="300"
+                    width="280"
+                  />
+                </Col>
+              ))}
+            </Row>
+          ) : (
+            <Empty
+              description={"No Posts"}
+              style={{ justifyContent: "center" }}
+            />
+          )}
         </Col>
         <Col md={4}></Col>
       </Row>

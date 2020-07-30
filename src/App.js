@@ -49,20 +49,30 @@ class App extends Component {
       username: this.state.username,
       password: this.state.password,
     };
-    axiosPost(URL.login, param, (response) => {
-      if (response.status === 200) {
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("user", response.data.message);
-        localStorage.setItem("userId", response.data.userId);
-        localStorage.setItem("name", response.data.name);
-        localStorage.setItem("username", response.data.username);
-        this.setState({
-          user: response.data.message,
-          isLogging: false,
-          isLoggedIn: true,
+    axiosPost(
+      URL.login,
+      param,
+      (response) => {
+        if (response.status === 200) {
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("user", response.data.message);
+          localStorage.setItem("userId", response.data.userId);
+          localStorage.setItem("name", response.data.name);
+          localStorage.setItem("username", response.data.username);
+          this.setState({
+            user: response.data.message,
+            isLogging: false,
+            isLoggedIn: true,
+          });
+        }
+      },
+      (error) => {
+        debugger;
+        this.setState({ isLogging: false }, () => {
+          message.error("Password incorrect.");
         });
       }
-    });
+    );
   };
 
   successMessage = () => {

@@ -8,26 +8,23 @@ import {
   CheckOutlined,
   CloseOutlined,
   UserOutlined,
+  GiftFilled,
 } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
 import ImgCrop from "antd-img-crop";
-import { Upload, message } from "antd";
+import { Upload } from "antd";
 import { server } from "../../utils/Constants";
+import ProfileStats from "./../ProfileStats/ProfileStats";
 
 class Bio extends Component {
   state = {
-    isUpdate: false,
     name: "",
     bio: "",
     modalVisible: false,
     propObj: {},
   };
 
-  componentDidMount() {
-    // this.renderIconOrImage();
-  }
-
-  //  renderIconOrImage = () => {};
+  componentDidMount() {}
 
   render() {
     let propObj = {};
@@ -42,48 +39,68 @@ class Bio extends Component {
         <Col md={12}>
           <Row>
             <Col md={18} style={{ marginTop: "5px", padding: "5px 5px" }}>
-              {this.state.isUpdate ? (
-                <Avatar
-                  size={128}
-                  className="profile-picture"
-                  {...propObj}
-                  onClick={() => {
-                    this.setState({ modalVisible: true });
-                  }}
-                />
-              ) : (
-                <>
-                  {this.props.profile?.profilePictureUrl ? (
+              <Row>
+                <Col md={6}>
+                  {" "}
+                  {this.props.isUpdate ? (
                     <Avatar
                       size={128}
                       className="profile-picture"
-                      src={`${server}/files/${this.props.profile?.profilePictureUrl}`}
+                      {...propObj}
+                      onClick={() => {
+                        this.setState({ modalVisible: true });
+                      }}
                     />
                   ) : (
-                    <Avatar
-                      size={128}
-                      className="profile-picture"
-                      icon={<UserOutlined />}
-                    />
+                    <>
+                      {this.props.profile?.profilePictureUrl ? (
+                        <Avatar
+                          size={128}
+                          className="profile-picture"
+                          src={`${server}/files/${this.props.profile?.profilePictureUrl}`}
+                        />
+                      ) : (
+                        <Avatar
+                          size={128}
+                          className="profile-picture"
+                          icon={<UserOutlined />}
+                        />
+                      )}
+                    </>
                   )}
-                </>
-              )}
-              {
-                <strong
-                  className="name"
-                  style={{ marginLeft: "10px", textDecoration: "underline" }}
-                >
-                  {localStorage.getItem("username")}
-                </strong>
-              }
+                </Col>
+                <Col md={18}>
+                  <Row>
+                    <Col md={24}>
+                      <strong
+                        style={{
+                          marginLeft: "20px",
+                          fontSize: "18px",
+                          marginTop: "2px",
+                        }}
+                      >
+                        {this.props.profile?.name}
+                      </strong>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md={24}>
+                      <ProfileStats />
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+
               <Row>
                 <Col md={24} className="name">
-                  {this.props.name}
+                  <strong style={{ textDecoration: "underline" }}>
+                    {localStorage.getItem("username")}
+                  </strong>
                 </Col>
               </Row>
               <Row>
                 <Col md={24} className="bio">
-                  {this.state.isUpdate ? (
+                  {this.props.isUpdate ? (
                     <>
                       <Row>
                         <Col md={24}>
@@ -107,7 +124,7 @@ class Bio extends Component {
                   )}
                 </Col>
                 <Col md={24} className="bio">
-                  {this.state.isUpdate ? (
+                  {this.props.isUpdate ? (
                     <>
                       <Row>
                         <Col md={24}>
@@ -128,7 +145,12 @@ class Bio extends Component {
                       </Row>
                     </>
                   ) : (
-                    this.props.profile?.birthday
+                    <>
+                      {this.props.profile?.birthday}
+                      <GiftFilled
+                        style={{ color: "red", marginLeft: "10px" }}
+                      />
+                    </>
                   )}
                 </Col>
               </Row>
@@ -150,14 +172,14 @@ class Bio extends Component {
                 <Col>
                   {this.props.match.params.username ===
                     localStorage.getItem("username") &&
-                  this.state.isUpdate === false ? (
+                  this.props.isUpdate === false ? (
                     <Button
                       type="primary"
                       icon={<SettingOutlined />}
                       shape="round"
                       className="follow-button"
                       onClick={() => {
-                        this.setState({ isUpdate: true });
+                        this.props.handleIsUpdate(true);
                       }}
                     >
                       Update
@@ -167,14 +189,14 @@ class Bio extends Component {
               </Row>
               <Row>
                 <Col>
-                  {this.state.isUpdate ? (
+                  {this.props.isUpdate ? (
                     <Button
                       type="primary"
                       icon={<CloseOutlined />}
                       shape="round"
                       className="cancel-button"
                       onClick={() => {
-                        this.setState({ isUpdate: false });
+                        this.props.handleIsUpdate(false);
                         this.props.clearImageURL();
                       }}
                     >
@@ -183,7 +205,7 @@ class Bio extends Component {
                   ) : null}
                 </Col>
                 <Col md={24}>
-                  {this.state.isUpdate ? (
+                  {this.props.isUpdate ? (
                     <Button
                       type="primary"
                       icon={<CheckOutlined />}

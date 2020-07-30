@@ -5,6 +5,7 @@ import ImgCrop from "antd-img-crop";
 import { Upload, message } from "antd";
 import { axiosPost } from "../../utils/AxiosApi";
 import { URL } from "../../utils/Constants";
+import { FileImageOutlined } from "@ant-design/icons";
 
 class CreatePost extends Component {
   state = {
@@ -45,8 +46,9 @@ class CreatePost extends Component {
       );
       axiosPost(URL.insertPost, formData, (response) => {
         if (response.status === 200) {
-          message.success("Post saved.");
-          this.setState({ modalVisible: false });
+          message.success("Post uploaded.");
+          this.setState({ modalVisible: false, caption: "", fileList: [] });
+          this.props.getPosts();
         }
       });
     } else {
@@ -69,8 +71,9 @@ class CreatePost extends Component {
             type="primary"
             onClick={() => this.setState({ modalVisible: true })}
             className="create-post-button"
+            icon={<FileImageOutlined />}
           >
-            New
+            New Post
           </Button>
           <Modal
             title={<strong>New Post</strong>}
@@ -93,6 +96,9 @@ class CreatePost extends Component {
                     fontWeight: "bold",
                     outline: "none",
                     padding: "5px 5px",
+                    borderTop: "none",
+                    borderLeft: "none",
+                    borderRight: "none",
                   }}
                   placeholder="caption"
                   onChange={(e) => this.setState({ caption: e.target.value })}
