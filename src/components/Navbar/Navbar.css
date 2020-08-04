@@ -8,6 +8,8 @@
     rgb(255, 206, 206) 100%
   ); */
   background-color: #376e6f;
+  position: fixed;
+  z-index: 1;
 }
 
 .navbar-logo {

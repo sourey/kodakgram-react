@@ -12,9 +12,10 @@ import {
 } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
 import ImgCrop from "antd-img-crop";
-import { Upload } from "antd";
-import { server } from "../../utils/Constants";
+import { Upload, message } from "antd";
+import { server, URL } from "../../utils/Constants";
 import ProfileStats from "./../ProfileStats/ProfileStats";
+import { axiosPost } from "./../../utils/AxiosApi";
 
 class Bio extends Component {
   state = {
@@ -22,9 +23,41 @@ class Bio extends Component {
     bio: "",
     modalVisible: false,
     propObj: {},
+    followed: null,
   };
 
-  componentDidMount() {}
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.userId !== this.props.userId) {
+      const following = JSON.parse(localStorage.getItem("following"));
+      this.setState({
+        followed: following.indexOf(this.props.userId) !== -1 ? true : false,
+      });
+    }
+  }
+
+  handleFollow = (followingId) => {
+    axiosPost(URL.follow, { followingId }, (response) => {
+      if (response.status === 200) {
+        this.setState({ followed: true });
+        let following = JSON.parse(localStorage.getItem("following"));
+        following.push(followingId);
+        localStorage.setItem("following", JSON.stringify(following));
+        message.success("followed");
+      }
+    });
+  };
+
+  handleUnFollow = (followingId) => {
+    axiosPost(URL.unfollow, { followingId }, (response) => {
+      if (response.status === 200) {
+        this.setState({ followed: false });
+        let following = JSON.parse(localStorage.getItem("following"));
+        following = following.filter((id) => id !== followingId);
+        localStorage.setItem("following", JSON.stringify(following));
+        message.success("unfollowed");
+      }
+    });
+  };
 
   render() {
     let propObj = {};
@@ -33,6 +66,7 @@ class Bio extends Component {
     } else {
       propObj.src = this.props.imgURL;
     }
+    const following = JSON.parse(localStorage.getItem("following"));
     return (
       <Row>
         <Col md={6}></Col>
@@ -85,7 +119,7 @@ class Bio extends Component {
                   </Row>
                   <Row>
                     <Col md={24}>
-                      <ProfileStats />
+                      <ProfileStats userId={this.props.userId} />
                     </Col>
                   </Row>
                 </Col>
@@ -94,7 +128,9 @@ class Bio extends Component {
               <Row>
                 <Col md={24} className="name">
                   <strong style={{ textDecoration: "underline" }}>
-                    {localStorage.getItem("username")}
+                    {this.props.match.params.username
+                      ? this.props.match.params.username
+                      : localStorage.getItem("username")}
                   </strong>
                 </Col>
               </Row>
@@ -158,14 +194,29 @@ class Bio extends Component {
             <Col md={6} style={{ marginTop: "5px", padding: "5px 5px" }}>
               {this.props.match.params.username ===
               localStorage.getItem("username") ? null : (
-                <Button
-                  type="primary"
-                  icon={<UserAddOutlined />}
-                  shape="round"
-                  className="follow-button"
-                >
-                  Follow
-                </Button>
+                <>
+                  {this.state.followed ? (
+                    <Button
+                      type="primary"
+                      icon={<CheckOutlined />}
+                      shape="round"
+                      className="follow-button"
+                      onClick={() => this.handleUnFollow(this.props.userId)}
+                    >
+                      Following
+                    </Button>
+                  ) : (
+                    <Button
+                      type="primary"
+                      icon={<UserAddOutlined />}
+                      shape="round"
+                      className="follow-button"
+                      onClick={() => this.handleFollow(this.props.userId)}
+                    >
+                      Follow
+                    </Button>
+                  )}
+                </>
               )}
 
               <Row style={{ marginTop: "5px" }}>

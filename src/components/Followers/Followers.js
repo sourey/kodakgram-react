@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Row, Col, Avatar, Button, message } from "antd";
 import { URL, server } from "../../utils/Constants";
 import { axiosPost } from "./../../utils/AxiosApi";
+import { Link } from "react-router-dom";
 
 class Followers extends Component {
   state = { users: [] };
@@ -35,23 +36,27 @@ class Followers extends Component {
       <Row
         style={{
           marginTop: "65px",
-          //backgroundColor: "#aef12c",
-          //justifyContent: "center",
         }}
       >
         <Col>
-          <strong>Sugesstions:</strong>
+          <strong>Suggestions:</strong>
           {this.state.users.map((user) => (
             <Row style={{ padding: "2px 2px", marginTop: "5px" }}>
               <Col md={18}>
-                <Avatar
-                  size={50}
-                  style={{ color: "#f56a00", backgroundColor: "#fde3cf" }}
-                  src={`${server}/files/${user.profilePictureUrl}`}
-                />
-                <span style={{ marginTop: "13px", marginLeft: "5px" }}>
-                  <strong>{user.username}</strong>
-                </span>
+                <Link
+                  to={{
+                    pathname: `/profile/${user.username}`,
+                  }}
+                >
+                  <Avatar
+                    size={50}
+                    style={{ color: "#f56a00", backgroundColor: "#376e6f" }}
+                    src={`${server}/files/${user.profilePictureUrl}`}
+                  />
+                  <span style={{ marginTop: "13px", marginLeft: "5px" }}>
+                    <strong>{user.username}</strong>
+                  </span>
+                </Link>
               </Col>
 
               <Col md={6}>

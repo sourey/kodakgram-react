@@ -7,16 +7,22 @@ class ProfilePost extends Component {
   render() {
     return (
       <Row>
-        <Col md={4}></Col>
-        <Col md={16} style={{ marginTop: "5px", padding: "5px 5px" }}>
+        <Col md={2}></Col>
+        <Col md={20} style={{ marginTop: "5px", padding: "5px 5px" }}>
           {this.props.posts.length > 0 ? (
             <Row>
               {this.props.posts.map((post) => (
-                <Col md={8} style={{ marginBottom: "15px" }} key={post.postId}>
+                <Col
+                  md={8}
+                  style={{
+                    marginBottom: "15px",
+                  }}
+                  key={post.postId}
+                >
                   <img
                     src={`${server}/files/${post.image}`}
                     height="300"
-                    width="280"
+                    width="300"
                   />
                 </Col>
               ))}
@@ -28,7 +34,7 @@ class ProfilePost extends Component {
             />
           )}
         </Col>
-        <Col md={4}></Col>
+        <Col md={2}></Col>
       </Row>
     );
   }

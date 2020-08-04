@@ -13,27 +13,82 @@ class Profile extends Component {
     fileList: [],
     imgURL: "",
     isUpdate: false,
+    userId: null,
   };
 
   componentDidMount() {
     this.getProfile();
-    this.getPosts();
   }
-
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevProps?.match?.params?.username !== this.props?.match?.params?.username
+    ) {
+      this.getProfile();
+    }
+  }
   getProfile = () => {
-    let param = { userId: localStorage.getItem("userId") };
+    let param;
+    if (this.props?.match?.params?.username) {
+      axiosPost(
+        URL.getUserByUsername,
+        {
+          username: this.props.match.params.username,
+        },
+        (response) => {
+          if (response.status === 200) {
+            this.setState({ userId: response.data.user.userId }, () => {
+              this.getPosts();
+            });
+            param = {
+              userId: response.data.user.userId,
+            };
+            this.call(param);
+            this.getPosts();
+          }
+        }
+      );
+    } else if (this.props?.location?.state?.userId) {
+      param = {
+        userId: this.props.location.state.userId,
+      };
+      this.setState({ userId: this.props.location.state.userId });
+      this.call(param);
+      this.getPosts();
+    } else {
+      param = { userId: localStorage.getItem("userId") };
+      this.setState({ userId: localStorage.getItem("userId") });
+      this.call(param);
+      this.getPosts();
+    }
+  };
+
+  call = (param) => {
     axiosPost(URL.getProfile, param, (response) => {
       if (response.status === 200) {
-        debugger;
         this.setState({ profile: response.data.profile });
       }
     });
   };
 
   getPosts = () => {
-    let param = {
-      userId: localStorage.getItem("userId"),
-    };
+    let param;
+    if (this.props?.location?.state?.userId) {
+      param = {
+        userId: this.props.location.state.userId,
+      };
+      this.callPost(param);
+    } else if (this.props?.match?.params?.username) {
+      param = {
+        userId: this.state.userId,
+      };
+      this.callPost(param);
+    } else {
+      param = { userId: localStorage.getItem("userId") };
+      this.callPost(param);
+    }
+  };
+
+  callPost = (param) => {
     axiosPost(URL.getPosts, param, (response) => {
       if (response.status === 200) {
         this.setState({ posts: response.data });
@@ -127,6 +182,8 @@ class Profile extends Component {
           handleIsUpdate={this.handleIsUpdate}
           imgURL={this.state.imgURL}
           isUpdate={this.state.isUpdate}
+          userId={this.state.userId}
+          following={this.props.following}
         />
         <ProfilePost posts={this.state.posts} />
       </>

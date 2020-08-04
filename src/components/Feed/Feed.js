@@ -1,25 +1,19 @@
 import React, { Component } from "react";
 import "./Feed.css";
-import {
-  Row,
-  Col,
-  Card,
-  Avatar,
-  message,
-  Popconfirm,
-  Comment,
-  Tooltip,
-} from "antd";
+import { Row, Col, Card, Avatar, message, Popconfirm } from "antd";
 import {
   CommentOutlined,
   HeartOutlined,
   DeleteOutlined,
+  HeartFilled,
+  UserOutlined,
 } from "@ant-design/icons";
 import CreatePost from "./../CreatePost/CreatePost";
 import { axiosPost } from "./../../utils/AxiosApi";
 import { URL, server } from "../../utils/Constants";
 import Followers from "./../Followers/Followers";
 import Comments from "./Comments";
+import { Link } from "react-router-dom";
 
 const { Meta } = Card;
 
@@ -31,12 +25,9 @@ class Feed extends Component {
   }
 
   getPosts = () => {
-    let param = {
-      userId: localStorage.getItem("userId"),
-    };
-    axiosPost(URL.getPosts, param, (response) => {
+    axiosPost(URL.getFeedPosts, {}, (response) => {
       if (response.status === 200) {
-        this.setState({ posts: response.data });
+        this.setState({ posts: response.data.posts });
       }
     });
   };
@@ -56,6 +47,35 @@ class Feed extends Component {
     });
   };
 
+  handleLike = (postId, userId) => {
+    let param = {
+      postId,
+      userId,
+    };
+    const likerId = localStorage.getItem("userId");
+    axiosPost(URL.likePost, param, (response) => {
+      if (response.status === 200) {
+        const index = this.state.posts.findIndex(
+          (post) => post.postId === postId
+        );
+        if (index !== -1) {
+          let posts = [...this.state.posts];
+          if (posts[index].likedBy && posts[index].likedBy.length > 0) {
+            posts[index].likedBy = posts[index].likedBy.filter(
+              (liker) => liker !== likerId
+            );
+          } else {
+            posts[index].likedBy = [];
+            posts[index].likedBy.push(likerId);
+          }
+          this.setState({
+            posts: posts,
+          });
+        }
+      }
+    });
+  };
+
   render() {
     return (
       <Row>
@@ -65,6 +85,7 @@ class Feed extends Component {
           {this.state.posts.map((post, idx) => (
             <>
               <Card
+                key={post.postId}
                 title={
                   <>
                     {post?.profilePictureUrl ? (
@@ -76,18 +97,24 @@ class Feed extends Component {
                     ) : (
                       <Avatar
                         size={40}
+                        icon={<UserOutlined />}
                         style={{ color: "#f56a00", backgroundColor: "#fde3cf" }}
-                      >
-                        SS
-                      </Avatar>
+                      />
                     )}
-
-                    <span className="username">{post.username}</span>
+                    <Link
+                      to={{
+                        pathname: `/profile/${post.username}`,
+                        state: { userId: post.userId },
+                      }}
+                      style={{ color: "black" }}
+                    >
+                      <span className="username">@{post.username}</span>
+                    </Link>
                   </>
                 }
                 id={idx}
                 className="feed-container"
-                style={{ width: 400 }}
+                style={{ width: "450px" }}
                 cover={
                   <img
                     alt={post.caption}
@@ -95,7 +122,24 @@ class Feed extends Component {
                   />
                 }
                 actions={[
-                  <HeartOutlined style={{ color: "#eb2f96" }} />,
+                  <>
+                    {post.likedBy?.indexOf(localStorage.getItem("userId")) !==
+                      -1 && post.likedBy !== undefined ? (
+                      <HeartFilled
+                        style={{ color: "#eb2f96" }}
+                        onClick={() =>
+                          this.handleLike(post.postId, post.userId)
+                        }
+                      />
+                    ) : (
+                      <HeartOutlined
+                        style={{ color: "#eb2f96" }}
+                        onClick={() =>
+                          this.handleLike(post.postId, post.userId)
+                        }
+                      />
+                    )}
+                  </>,
                   <>
                     <Row>
                       <Col md={12}>

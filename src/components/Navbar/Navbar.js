@@ -47,54 +47,53 @@ class Navbar extends Component {
 
   render() {
     return (
-      <div className="navbar">
-        <Row>
-          <Col md={8}>
+      <Row className="navbar">
+        <Col md={8}>
+          <Link to="/">
             <img
               src="https://img.icons8.com/plasticine/50/000000/camera.png"
               alt="logo"
               style={{ marginLeft: "100px" }}
             />
             <span className="logo-text">KodakGram</span>
-          </Col>
-          <Col md={8}></Col>
-          <Col md={8}>
-            <span className="nav-profile">
-              <Row>
-                <Col md={8} style={{ marginRight: "15px" }}>
-                  <Link to="/feed" className="menu-item">
-                    <HomeOutlined
-                      style={{
-                        fontSize: "24px",
-                        marginRight: "20px",
-                        marginTop: "6px",
-                        color: "white",
-                      }}
-                      className="hover-icon"
-                    />
-                  </Link>
-                </Col>
-                <Col md={8}>
-                  <Dropdown overlay={this.renderMenu()}>
-                    <UserOutlined
-                      style={{
-                        fontSize: "24px",
-                        marginRight: "20px",
-                        marginTop: "6px",
-                        color: "white",
-                      }}
-                      className="hover-icon"
-                    />
-                    {/* </a> */}
-                  </Dropdown>
-                </Col>
-                <Col md={8}></Col>
-              </Row>
-            </span>
-          </Col>
-        </Row>
-        {/* <div className="navbar-logo"></div> */}
-      </div>
+          </Link>
+        </Col>
+        <Col md={8}></Col>
+        <Col md={8}>
+          <span className="nav-profile">
+            <Row>
+              <Col md={8} style={{ marginRight: "15px" }}>
+                <Link to="/feed" className="menu-item">
+                  <HomeOutlined
+                    style={{
+                      fontSize: "24px",
+                      marginRight: "20px",
+                      marginTop: "6px",
+                      color: "white",
+                    }}
+                    className="hover-icon"
+                  />
+                </Link>
+              </Col>
+              <Col md={8}>
+                <Dropdown overlay={this.renderMenu()}>
+                  <UserOutlined
+                    style={{
+                      fontSize: "24px",
+                      marginRight: "20px",
+                      marginTop: "6px",
+                      color: "white",
+                    }}
+                    className="hover-icon"
+                  />
+                  {/* </a> */}
+                </Dropdown>
+              </Col>
+              <Col md={8}></Col>
+            </Row>
+          </span>
+        </Col>
+      </Row>
     );
   }
 }
