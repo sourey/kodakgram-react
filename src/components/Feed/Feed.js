@@ -1,6 +1,15 @@
 import React, { Component } from "react";
 import "./Feed.css";
-import { Row, Col, Card, Avatar, message, Popconfirm } from "antd";
+import {
+  Row,
+  Col,
+  Card,
+  Avatar,
+  message,
+  Popconfirm,
+  Skeleton,
+  Spin,
+} from "antd";
 import {
   CommentOutlined,
   HeartOutlined,
@@ -18,7 +27,7 @@ import { Link } from "react-router-dom";
 const { Meta } = Card;
 
 class Feed extends Component {
-  state = { posts: [] };
+  state = { posts: [], comment: "", postLoading: true };
 
   componentDidMount() {
     this.getPosts();
@@ -27,7 +36,7 @@ class Feed extends Component {
   getPosts = () => {
     axiosPost(URL.getFeedPosts, {}, (response) => {
       if (response.status === 200) {
-        this.setState({ posts: response.data.posts });
+        this.setState({ posts: response.data.posts, postLoading: false });
       }
     });
   };
@@ -76,6 +85,69 @@ class Feed extends Component {
     });
   };
 
+  handleComment = (e, postId, postIndex) => {
+    const comment = e.target.value;
+    const username = localStorage.getItem("username");
+    const profilePictureUrl = localStorage.getItem("profilePictureUrl");
+    const param = {
+      postId,
+      comment,
+      username,
+    };
+    if (e.key === "Enter" && e.target.value !== "") {
+      axiosPost(URL.insertComment, param, (response) => {
+        if (response.status === 200) {
+          document.getElementById(`comment-${postIndex}`).value = "";
+          let newPosts = [...this.state.posts];
+          const userId = localStorage.getItem("userId");
+          if (newPosts[postIndex].comments) {
+            newPosts[postIndex].comments.push({
+              comment,
+              username,
+              profilePictureUrl,
+            });
+          } else {
+            newPosts[postIndex].comments = [];
+            newPosts[postIndex].comments.push({
+              comment,
+              username,
+              profilePictureUrl,
+            });
+          }
+          this.setState({ posts: newPosts }, () => {
+            message.success("comment posted");
+          });
+        }
+      });
+    }
+  };
+
+  handleDeleteComment = (postId, commentId, postIndex) => {
+    let param = {
+      postId,
+      commentId,
+    };
+    axiosPost(URL.deleteComment, param, (response) => {
+      if (response.status === 200) {
+        let newPosts = [...this.state.posts];
+        if (newPosts[postIndex].comments) {
+          newPosts[postIndex].comments = newPosts[postIndex].comments.filter(
+            (comment) => comment.commentId !== commentId
+          );
+          this.setState({ posts: newPosts }, () => {
+            message.success("comment deleted.");
+          });
+        }
+      }
+    });
+  };
+
+  handleShowComments = (idx) => {
+    let newPosts = [...this.state.posts];
+    newPosts[idx].showComments = !newPosts[idx].showComments;
+    this.setState({ posts: newPosts });
+  };
+
   render() {
     return (
       <Row>
@@ -83,7 +155,7 @@ class Feed extends Component {
         <Col md={12}>
           <CreatePost getPosts={this.getPosts} />
           {this.state.posts.map((post, idx) => (
-            <>
+            <Spin spinning={this.state.postLoading}>
               <Card
                 key={post.postId}
                 title={
@@ -122,49 +194,57 @@ class Feed extends Component {
                   />
                 }
                 actions={[
+                  <Row>
+                    <Col md={24}>
+                      {post.likedBy?.indexOf(localStorage.getItem("userId")) !==
+                        -1 && post.likedBy !== undefined ? (
+                        <HeartFilled
+                          style={{ color: "#eb2f96" }}
+                          onClick={() =>
+                            this.handleLike(post.postId, post.userId)
+                          }
+                        />
+                      ) : (
+                        <HeartOutlined
+                          style={{ color: "#eb2f96" }}
+                          onClick={() =>
+                            this.handleLike(post.postId, post.userId)
+                          }
+                        />
+                      )}
+                    </Col>
+                  </Row>,
                   <>
-                    {post.likedBy?.indexOf(localStorage.getItem("userId")) !==
-                      -1 && post.likedBy !== undefined ? (
-                      <HeartFilled
-                        style={{ color: "#eb2f96" }}
-                        onClick={() =>
-                          this.handleLike(post.postId, post.userId)
-                        }
-                      />
-                    ) : (
-                      <HeartOutlined
-                        style={{ color: "#eb2f96" }}
-                        onClick={() =>
-                          this.handleLike(post.postId, post.userId)
-                        }
-                      />
-                    )}
-                  </>,
-                  <>
-                    <Row>
+                    <Row onClick={() => this.handleShowComments(idx)}>
                       <Col md={12}>
-                        <span style={{ marginLeft: "60px" }}>10</span>
+                        <span style={{ marginLeft: "80px" }}>
+                          {post?.comments?.length}
+                        </span>
                       </Col>
                       <Col md={12}>
-                        <CommentOutlined style={{ marginLeft: "40px" }} />
+                        <CommentOutlined style={{ marginLeft: "50px" }} />
                       </Col>
                     </Row>
                   </>,
-                  <Popconfirm
-                    title="Are you sure to delete this post?"
-                    onConfirm={(e) => this.handleDeletePost(e, post.postId)}
-                    onCancel={this.cancelDelete}
-                    okText="Yes"
-                    cancelText="No"
-                    okButtonProps={{
-                      style: {
-                        backgroundColor: "#376e6f",
-                        borderColor: "#376e6f",
-                      },
-                    }}
-                  >
-                    <DeleteOutlined style={{ marginLeft: "70px" }} />
-                  </Popconfirm>,
+                  <>
+                    {post.userId === localStorage.getItem("userId") ? (
+                      <Popconfirm
+                        title="Are you sure to delete this post?"
+                        onConfirm={(e) => this.handleDeletePost(e, post.postId)}
+                        onCancel={this.cancelDelete}
+                        okText="Yes"
+                        cancelText="No"
+                        okButtonProps={{
+                          style: {
+                            backgroundColor: "#376e6f",
+                            borderColor: "#376e6f",
+                          },
+                        }}
+                      >
+                        <DeleteOutlined style={{ marginLeft: "70px" }} />
+                      </Popconfirm>
+                    ) : null}
+                  </>,
                   ,
                 ]}
               >
@@ -175,8 +255,15 @@ class Feed extends Component {
                   }}
                 />
               </Card>
-              <Comments />
-            </>
+              <Comments
+                id={idx}
+                postId={post.postId}
+                comments={post?.comments}
+                showComments={post.showComments}
+                handleComment={this.handleComment}
+                handleDeleteComment={this.handleDeleteComment}
+              />
+            </Spin>
           ))}
         </Col>
         <Col md={6}>

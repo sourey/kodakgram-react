@@ -1,27 +1,67 @@
 import React, { Component } from "react";
-import { Comment, Avatar } from "antd";
+import { Comment, Avatar, Col, Row } from "antd";
+import { server } from "../../utils/Constants";
+import { DeleteOutlined } from "@ant-design/icons";
 
 class Comments extends Component {
   state = {};
   render() {
     return (
-      <Comment
-        style={{ marginLeft: "105px" }}
-        //actions={actions}
-        author={<a>Han Solo</a>}
-        avatar={
-          <Avatar
-            src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-            alt="Han Solo"
-          />
-        }
-        content={<p>It is what it is</p>}
-        // datetime={
-        //   <Tooltip title={moment().format("YYYY-MM-DD HH:mm:ss")}>
-        //     <span>{moment().fromNow()}</span>
-        //   </Tooltip>
-        // }
-      />
+      <>
+        {this.props.showComments &&
+          this.props.comments?.map((comment, idx) => (
+            <Row style={{ width: "450px" }} key={idx}>
+              <Col md={22}>
+                <Comment
+                  style={{
+                    marginLeft: "60px",
+                    padding: `0px ${idx * 3}px`,
+                  }}
+                  author={comment.username}
+                  avatar={
+                    <Avatar
+                      src={`${server}/files/${comment.profilePictureUrl}`}
+                      alt={comment.username}
+                    />
+                  }
+                  content={comment.comment}
+                />
+              </Col>
+              <Col md={2}>
+                <DeleteOutlined
+                  style={{
+                    marginTop: "18px",
+                    fontSize: "16px",
+                    marginLeft: "65px",
+                  }}
+                  onClick={() =>
+                    this.props.handleDeleteComment(
+                      this.props.postId,
+                      comment.commentId,
+                      this.props.id
+                    )
+                  }
+                />
+              </Col>
+            </Row>
+          ))}
+        <input
+          key={this.props.postId}
+          id={`comment-${this.props.id}`}
+          type="text"
+          name="comment"
+          style={{
+            width: "450px",
+            marginLeft: "57px",
+            marginBottom: "10px",
+            marginTop: "10px",
+          }}
+          placeholder="write a comment"
+          onKeyPress={(e) =>
+            this.props.handleComment(e, this.props.postId, this.props.id)
+          }
+        />
+      </>
     );
   }
 }

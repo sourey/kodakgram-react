@@ -32,14 +32,16 @@
 }
 
 .save-button {
-  background-color: #376e6f !important;
-  border-color: #376e6f !important;
+  background-color: #0b5f61 !important;
+  border-color: #0b5f61 !important;
   margin-top: 25px;
-  margin-left: 11px;
+  margin-left: 18px;
 }
 
 .cancel-button {
-  background-color: #70295b !important;
-  border-color: #70295b !important;
+  background-color: #37635b !important;
+  border-color: #37635b !important;
   margin-top: 5px;
+  margin-left: 15px;
+  padding: 0px 12px;
 }

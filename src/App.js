@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Suspense } from "react";
 import Signup from "./components/Auth/Signup";
 import { Route, Switch } from "react-router-dom";
 import { axiosPost } from "./utils/AxiosApi";
@@ -6,10 +6,12 @@ import { URL } from "./utils/Constants";
 import Feed from "./components/Feed/Feed";
 import "./App.css";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
-import Profile from "./components/Profile/Profile";
+//import Profile from "./components/Profile/Profile";
 import NotFound from "./components/Notfound/Notfound";
 import Navbar from "./components/Navbar/Navbar";
 import { message, Row, Col } from "antd";
+
+const Profile = React.lazy(() => import("./components/Profile/Profile"));
 
 class App extends Component {
   constructor() {
@@ -62,6 +64,10 @@ class App extends Component {
           localStorage.setItem("userId", response.data.userId);
           localStorage.setItem("name", response.data.name);
           localStorage.setItem("username", response.data.username);
+          localStorage.setItem(
+            "profilePictureUrl",
+            response.data.profilePictureUrl
+          );
           localStorage.setItem(
             "following",
             JSON.stringify(response.data.following)
@@ -133,6 +139,12 @@ class App extends Component {
           style={{ marginTop: this.state.isLoggedIn ? "50px" : "0px" }}
         >
           <Switch>
+            <PrivateRoute
+              authed={this.state.isLoggedIn}
+              user={this.state.user}
+              path="/feed"
+              component={Feed}
+            />
             <Route
               exact
               path="/"
@@ -151,19 +163,15 @@ class App extends Component {
                 )
               }
             />
-            <PrivateRoute
-              authed={this.state.isLoggedIn}
-              user={this.state.user}
-              following={this.state.following}
-              path="/profile/:username"
-              component={Profile}
-            />
-            <PrivateRoute
-              authed={this.state.isLoggedIn}
-              user={this.state.user}
-              path="/feed"
-              component={Feed}
-            />
+            <Suspense fallback={<div>loading...</div>}>
+              <PrivateRoute
+                authed={this.state.isLoggedIn}
+                user={this.state.user}
+                following={this.state.following}
+                path="/profile/:username"
+                component={Profile}
+              />
+            </Suspense>
 
             <Route path="*" render={() => <NotFound />} />
           </Switch>

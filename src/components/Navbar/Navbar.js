@@ -30,13 +30,14 @@ class Navbar extends Component {
             <UserOutlined style={{ marginLeft: "10px", fontSize: "14px" }} />
           </Link>
         </Menu.Item>
-        <Menu.Item className="menu-item">
-          <span
-            onClick={() => {
-              localStorage.clear();
-              window.location.reload();
-            }}
-          >
+        <Menu.Item
+          className="menu-item"
+          onClick={() => {
+            localStorage.clear();
+            window.location.reload();
+          }}
+        >
+          <span>
             Logout
             <LogoutOutlined style={{ marginLeft: "10px", fontSize: "14px" }} />
           </span>

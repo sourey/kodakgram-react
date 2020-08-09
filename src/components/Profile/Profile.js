@@ -14,6 +14,7 @@ class Profile extends Component {
     imgURL: "",
     isUpdate: false,
     userId: null,
+    comment: "",
   };
 
   componentDidMount() {
@@ -89,11 +90,18 @@ class Profile extends Component {
   };
 
   callPost = (param) => {
-    axiosPost(URL.getPosts, param, (response) => {
-      if (response.status === 200) {
-        this.setState({ posts: response.data });
+    axiosPost(
+      URL.getPosts,
+      param,
+      (response) => {
+        if (response.status === 200) {
+          this.setState({ posts: response.data });
+        }
+      },
+      (error) => {
+        this.setState({ posts: [] });
       }
-    });
+    );
   };
 
   handleChange = (e) => {
@@ -167,6 +175,98 @@ class Profile extends Component {
     this.setState({ isUpdate: bool });
   };
 
+  handleCommentChange = (e) => {
+    this.setState({ comment: e.target.value });
+  };
+
+  handleComment = (e, postId, postIndex) => {
+    const comment = e.target.value;
+    if (e.key === "Enter" && e.target.value !== "") {
+      this.postComment(comment, postId, postIndex);
+    }
+    if (!e.key && this.state.comment !== "") {
+      this.postComment(this.state.comment, postId, postIndex);
+    }
+  };
+
+  postComment = (comment, postId, postIndex) => {
+    const username = localStorage.getItem("username");
+    const profilePictureUrl = localStorage.getItem("profilePictureUrl");
+    const param = {
+      postId,
+      comment: comment,
+      username,
+    };
+    axiosPost(URL.insertComment, param, (response) => {
+      if (response.status === 200) {
+        debugger;
+        document.getElementById(`comment`).value = "";
+        let newPosts = [...this.state.posts];
+        if (newPosts[postIndex].comments) {
+          newPosts[postIndex].comments.push({
+            comment,
+            username,
+            profilePictureUrl,
+          });
+        } else {
+          newPosts[postIndex].comments = [];
+          newPosts[postIndex].comments.push({
+            comment,
+            username,
+            profilePictureUrl,
+          });
+        }
+        this.setState({ posts: newPosts }, () => {
+          message.success("comment posted");
+        });
+      }
+    });
+  };
+
+  handleLike = (postId, userId) => {
+    let param = {
+      postId,
+      userId,
+    };
+    const likerId = localStorage.getItem("userId");
+    axiosPost(URL.likePost, param, (response) => {
+      if (response.status === 200) {
+        const index = this.state.posts.findIndex(
+          (post) => post.postId === postId
+        );
+        if (index !== -1) {
+          let posts = [...this.state.posts];
+          if (posts[index].likedBy && posts[index].likedBy.length > 0) {
+            posts[index].likedBy = posts[index].likedBy.filter(
+              (liker) => liker !== likerId
+            );
+          } else {
+            posts[index].likedBy = [];
+            posts[index].likedBy.push(likerId);
+          }
+          this.setState({
+            posts: posts,
+          });
+        }
+      }
+    });
+  };
+
+  handleDeletePost = (e, postId) => {
+    let param = {
+      userId: localStorage.getItem("userId"),
+      postId,
+    };
+    axiosPost(URL.deletePost, param, (response) => {
+      if (response.status === 200) {
+        this.setState({
+          posts: this.state.posts.filter((post) => post.postId !== postId),
+        });
+        message.success("Post deleted.");
+      }
+    });
+  };
+
   render() {
     return (
       <>
@@ -185,7 +285,13 @@ class Profile extends Component {
           userId={this.state.userId}
           following={this.props.following}
         />
-        <ProfilePost posts={this.state.posts} />
+        <ProfilePost
+          posts={this.state.posts}
+          handleComment={this.handleComment}
+          handleCommentChange={this.handleCommentChange}
+          handleLike={this.handleLike}
+          handleDeletePost={this.handleDeletePost}
+        />
       </>
     );
   }

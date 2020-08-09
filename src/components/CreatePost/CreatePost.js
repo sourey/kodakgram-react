@@ -69,6 +69,7 @@ class CreatePost extends Component {
         <Col md={12}>
           <Button
             type="primary"
+            shape="round"
             onClick={() => this.setState({ modalVisible: true })}
             className="create-post-button"
             icon={<FileImageOutlined />}
@@ -80,9 +81,19 @@ class CreatePost extends Component {
             centered
             visible={this.state.modalVisible}
             onOk={this.handleSubmit}
-            onCancel={() => this.setState({ modalVisible: false })}
+            onCancel={() => this.setState({ modalVisible: false, caption: "" })}
             okButtonProps={{
-              style: { backgroundColor: "#376e6f", borderColor: "#376e6f" },
+              style: {
+                backgroundColor: "#376e6f",
+                borderColor: "#376e6f",
+                borderRadius: "32px",
+                padding: "0px 20px",
+              },
+            }}
+            cancelButtonProps={{
+              style: {
+                borderRadius: "32px",
+              },
             }}
           >
             <Row>
@@ -101,11 +112,12 @@ class CreatePost extends Component {
                     borderRight: "none",
                   }}
                   placeholder="caption"
+                  value={this.state.caption}
                   onChange={(e) => this.setState({ caption: e.target.value })}
                 />
               </Col>
               <Col>
-                <ImgCrop grid zoom={false} rotate={true}>
+                <ImgCrop grid>
                   <Upload
                     action=""
                     listType="picture-card"

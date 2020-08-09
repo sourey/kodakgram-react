@@ -3,6 +3,9 @@
   padding: 5px 5px !important;
   margin-left: 56px !important;
   margin-top: 10px !important;
+  -webkit-box-shadow: 4px 5px 10px 0px rgba(158, 186, 176, 1);
+  -moz-box-shadow: 4px 5px 10px 0px rgba(158, 186, 176, 1);
+  box-shadow: 4px 5px 10px 0px rgba(158, 186, 176, 1);
 }
 
 .ant-card-head {

@@ -66,7 +66,6 @@ class Bio extends Component {
     } else {
       propObj.src = this.props.imgURL;
     }
-    const following = JSON.parse(localStorage.getItem("following"));
     return (
       <Row>
         <Col md={6}></Col>
@@ -149,7 +148,13 @@ class Bio extends Component {
                             id="bio"
                             name="bio"
                             value={this.props.profile?.bio}
-                            style={{ width: "100%", outline: "none" }}
+                            style={{
+                              width: "100%",
+                              outline: "none",
+                              borderTop: "none",
+                              borderLeft: "none",
+                              borderRight: "none",
+                            }}
                             onChange={this.props.handleChange}
                           />
                         </Col>
@@ -174,7 +179,11 @@ class Bio extends Component {
                             id="bio"
                             name="birthday"
                             value={this.props.profile?.birthday}
-                            style={{ width: "100%", outline: "none" }}
+                            style={{
+                              width: "100%",
+                              outline: "none",
+                              border: "none",
+                            }}
                             onChange={this.props.handleChange}
                           />
                         </Col>
@@ -182,10 +191,13 @@ class Bio extends Component {
                     </>
                   ) : (
                     <>
-                      {this.props.profile?.birthday}
-                      <GiftFilled
-                        style={{ color: "red", marginLeft: "10px" }}
-                      />
+                      {this.props.profile?.birthday ? (
+                        <img
+                          src="https://img.icons8.com/plasticine/30/000000/birthday-cake.png"
+                          style={{ marginBottom: "12px", marginRight: "5px" }}
+                        />
+                      ) : null}
+                      {this.props.profile?.birthday.slice(-5)}
                     </>
                   )}
                 </Col>
