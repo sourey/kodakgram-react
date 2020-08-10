@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Comment, Avatar, Col, Row } from "antd";
 import { server } from "../../utils/Constants";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, UserOutlined } from "@ant-design/icons";
 
 class Comments extends Component {
   state = {};
@@ -19,10 +19,18 @@ class Comments extends Component {
                   }}
                   author={comment.username}
                   avatar={
-                    <Avatar
-                      src={`${server}/files/${comment.profilePictureUrl}`}
-                      alt={comment.username}
-                    />
+                    comment.profilePictureUrl ? (
+                      <Avatar
+                        src={`${server}/files/${comment.profilePictureUrl}`}
+                        alt={comment.username}
+                      />
+                    ) : (
+                      <Avatar
+                        //size={40}
+                        icon={<UserOutlined />}
+                        style={{ color: "#FFFFFF", backgroundColor: "#376e6f" }}
+                      />
+                    )
                   }
                   content={comment.comment}
                 />

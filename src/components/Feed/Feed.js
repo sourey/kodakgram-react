@@ -163,14 +163,14 @@ class Feed extends Component {
                     {post?.profilePictureUrl ? (
                       <Avatar
                         size={50}
-                        style={{ color: "#f56a00", backgroundColor: "#fde3cf" }}
+                        style={{ color: "#376e6f", backgroundColor: "#376e6f" }}
                         src={`${server}/files/${post.profilePictureUrl}`}
                       />
                     ) : (
                       <Avatar
                         size={40}
                         icon={<UserOutlined />}
-                        style={{ color: "#f56a00", backgroundColor: "#fde3cf" }}
+                        style={{ color: "#FFFFFF", backgroundColor: "#376e6f" }}
                       />
                     )}
                     <Link
@@ -249,7 +249,11 @@ class Feed extends Component {
                 ]}
               >
                 <Meta
-                  title={post.caption}
+                  title={
+                    <span style={{ whiteSpace: "pre-line" }}>
+                      {post.caption}
+                    </span>
+                  }
                   style={{
                     fontWeight: "bold",
                   }}

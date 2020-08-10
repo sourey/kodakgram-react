@@ -28,7 +28,7 @@ class Bio extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.userId !== this.props.userId) {
-      const following = JSON.parse(localStorage.getItem("following"));
+      const following = JSON.parse(localStorage.getItem("following") || []);
       this.setState({
         followed: following.indexOf(this.props.userId) !== -1 ? true : false,
       });
@@ -161,7 +161,9 @@ class Bio extends Component {
                       </Row>
                     </>
                   ) : (
-                    this.props.profile?.bio
+                    <span style={{ whiteSpace: "pre-line" }}>
+                      {this.props.profile?.bio}
+                    </span>
                   )}
                 </Col>
                 <Col md={24} className="bio">
@@ -297,7 +299,7 @@ class Bio extends Component {
         >
           <Row>
             <Col>
-              <ImgCrop grid zoom={false} rotate={true}>
+              <ImgCrop grid>
                 <Upload
                   action=""
                   listType="picture-card"

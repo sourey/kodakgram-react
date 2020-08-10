@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import { Modal, Row, Col, Avatar } from "antd";
 import { server } from "../../utils/Constants";
-import { HeartFilled, HeartOutlined, CommentOutlined } from "@ant-design/icons";
+import {
+  HeartFilled,
+  HeartOutlined,
+  CommentOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 
 class ProfilePostModal extends Component {
   state = {};
@@ -28,17 +33,25 @@ class ProfilePostModal extends Component {
           <Col md={10}>
             <Row style={{ marginLeft: "5px", marginTop: "10px" }}>
               <Col md={4}>
-                <Avatar
-                  src={`${server}/files/${this.props?.post?.profilePictureUrl}`}
-                />
+                {this.props?.post?.profilePictureUrl ? (
+                  <Avatar
+                    src={`${server}/files/${this.props?.post?.profilePictureUrl}`}
+                  />
+                ) : (
+                  <Avatar
+                    icon={<UserOutlined />}
+                    alt={this.props?.post?.username}
+                    style={{ color: "#FFFFFF", backgroundColor: "#376e6f" }}
+                  />
+                )}
               </Col>
               <Col md={20}>
                 <Row>
                   <Col md={24}>
                     <div
                       style={{
-                        marginTop: "7px",
-                        marginLeft: "-10px",
+                        marginTop: "5px",
+                        marginLeft: "-15px",
                       }}
                     >
                       <strong>{this.props?.post?.username}</strong>
@@ -66,12 +79,20 @@ class ProfilePostModal extends Component {
               {this.props?.post?.comments?.map((comment, idx) => (
                 <Row style={{ marginLeft: "5px", marginTop: "25px" }} key={idx}>
                   <Col md={3}>
-                    <Avatar
-                      src={`${server}/files/${comment.profilePictureUrl}`}
-                      alt={comment.username}
-                    />
+                    {comment.profilePictureUrl ? (
+                      <Avatar
+                        src={`${server}/files/${comment.profilePictureUrl}`}
+                        alt={comment.username}
+                      />
+                    ) : (
+                      <Avatar
+                        icon={<UserOutlined />}
+                        alt={comment.username}
+                        style={{ color: "#FFFFFF", backgroundColor: "#376e6f" }}
+                      />
+                    )}
                   </Col>
-                  <Col md={21}>
+                  <Col md={21} style={{ marginTop: "3px" }}>
                     <span>
                       <strong>{comment.username}</strong>
                     </span>
