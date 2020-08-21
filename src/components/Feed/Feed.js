@@ -239,7 +239,7 @@ class Feed extends Component {
                                 );
                             }}
                           >
-                            {post.likedBy?.length} likes
+                            {post.likedBy?.length || 0} likes
                           </span>
                           {post.likedBy?.indexOf(
                             localStorage.getItem("userId")
