@@ -2,8 +2,8 @@ export const userId = localStorage.getItem("userId");
 export const name = localStorage.getItem("name");
 export const username = localStorage.getItem("username");
 
-export const server = "https://shrouded-thicket-89855.herokuapp.com";
-//export const server = "http://localhost:8080";
+// export const server = "https://shrouded-thicket-89855.herokuapp.com";
+export const server = "http://localhost:8080";
 
 export const URL = {
   login: `${server}/login`,
@@ -21,6 +21,7 @@ export const URL = {
   unfollow: `${server}/followers/unfollow`,
   getProfileStats: `${server}/profile/stats`,
   likePost: `${server}/post/like`,
+  getPostLikers: `${server}/post/likers`,
   getUserByUsername: `${server}/username`,
   insertComment: `${server}/post/comment`,
   deleteComment: `${server}/post/comment/delete`,

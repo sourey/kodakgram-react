@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col } from "antd";
+import { Row, Col, Skeleton } from "antd";
 import { Avatar, Button, Modal } from "antd";
 import {
   UserAddOutlined,
@@ -8,7 +8,6 @@ import {
   CheckOutlined,
   CloseOutlined,
   UserOutlined,
-  GiftFilled,
 } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
 import ImgCrop from "antd-img-crop";
@@ -134,75 +133,89 @@ class Bio extends Component {
                 </Col>
               </Row>
               <Row>
-                <Col md={24} className="bio">
-                  {this.props.isUpdate ? (
-                    <>
-                      <Row>
-                        <Col md={24}>
-                          <label>Bio:</label>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col md={24}>
-                          <textarea
-                            id="bio"
-                            name="bio"
-                            value={this.props.profile?.bio}
-                            style={{
-                              width: "100%",
-                              outline: "none",
-                              borderTop: "none",
-                              borderLeft: "none",
-                              borderRight: "none",
-                            }}
-                            onChange={this.props.handleChange}
-                          />
-                        </Col>
-                      </Row>
-                    </>
-                  ) : (
-                    <span style={{ whiteSpace: "pre-line" }}>
-                      {this.props.profile?.bio}
-                    </span>
-                  )}
-                </Col>
-                <Col md={24} className="bio">
-                  {this.props.isUpdate ? (
-                    <>
-                      <Row>
-                        <Col md={24}>
-                          <label>Birthday:</label>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col md={24}>
-                          <input
-                            type="date"
-                            id="bio"
-                            name="birthday"
-                            value={this.props.profile?.birthday}
-                            style={{
-                              width: "100%",
-                              outline: "none",
-                              border: "none",
-                            }}
-                            onChange={this.props.handleChange}
-                          />
-                        </Col>
-                      </Row>
-                    </>
-                  ) : (
-                    <>
-                      {this.props.profile?.birthday ? (
-                        <img
-                          src="https://img.icons8.com/plasticine/30/000000/birthday-cake.png"
-                          style={{ marginBottom: "12px", marginRight: "5px" }}
-                        />
-                      ) : null}
-                      {this.props.profile?.birthday.slice(-5)}
-                    </>
-                  )}
-                </Col>
+                {this.props.profile !== null ? (
+                  <>
+                    {" "}
+                    <Col md={24} className="bio">
+                      {this.props.isUpdate ? (
+                        <>
+                          <Row>
+                            <Col md={24}>
+                              <label>Bio:</label>
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col md={24}>
+                              <textarea
+                                id="bio"
+                                name="bio"
+                                value={this.props.profile?.bio}
+                                style={{
+                                  width: "100%",
+                                  outline: "none",
+                                  borderTop: "none",
+                                  borderLeft: "none",
+                                  borderRight: "none",
+                                }}
+                                onChange={this.props.handleChange}
+                              />
+                            </Col>
+                          </Row>
+                        </>
+                      ) : (
+                        <span style={{ whiteSpace: "pre-line" }}>
+                          {this.props.profile?.bio}
+                        </span>
+                      )}
+                    </Col>
+                    <Col md={24} className="bio">
+                      {this.props.isUpdate ? (
+                        <>
+                          <Row>
+                            <Col md={24}>
+                              <label>Birthday:</label>
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col md={24}>
+                              <input
+                                type="date"
+                                id="bio"
+                                name="birthday"
+                                value={this.props.profile?.birthday}
+                                style={{
+                                  width: "100%",
+                                  outline: "none",
+                                  border: "none",
+                                }}
+                                onChange={this.props.handleChange}
+                              />
+                            </Col>
+                          </Row>
+                        </>
+                      ) : (
+                        <>
+                          {this.props.profile?.birthday ? (
+                            <img
+                              src="https://img.icons8.com/plasticine/30/000000/birthday-cake.png"
+                              style={{
+                                marginBottom: "12px",
+                                marginRight: "5px",
+                              }}
+                            />
+                          ) : null}
+                          {this.props.profile?.birthday.slice(-5)}
+                        </>
+                      )}
+                    </Col>
+                  </>
+                ) : (
+                  <Skeleton
+                    active
+                    paragraph={{ rows: 3, width: "350px" }}
+                    title={false}
+                  />
+                )}
               </Row>
             </Col>
             <Col md={6} style={{ marginTop: "5px", padding: "5px 5px" }}>

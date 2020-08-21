@@ -4,7 +4,7 @@ import { URL } from "./../../utils/Constants";
 import "./Profile.css";
 import Bio from "./../Bio/Bio";
 import ProfilePost from "./../ProfilePost/ProfilePost";
-import { message } from "antd";
+import { message, Spin } from "antd";
 
 class Profile extends Component {
   state = {
@@ -15,6 +15,7 @@ class Profile extends Component {
     isUpdate: false,
     userId: null,
     comment: "",
+    postLoading: true,
   };
 
   componentDidMount() {
@@ -95,11 +96,11 @@ class Profile extends Component {
       param,
       (response) => {
         if (response.status === 200) {
-          this.setState({ posts: response.data });
+          this.setState({ posts: response.data, postLoading: false });
         }
       },
       (error) => {
-        this.setState({ posts: [] });
+        this.setState({ posts: [], postLoading: false });
       }
     );
   };
@@ -285,8 +286,10 @@ class Profile extends Component {
           userId={this.state.userId}
           following={this.props.following}
         />
+
         <ProfilePost
           posts={this.state.posts}
+          postLoading={this.state.postLoading}
           handleComment={this.handleComment}
           handleCommentChange={this.handleCommentChange}
           handleLike={this.handleLike}

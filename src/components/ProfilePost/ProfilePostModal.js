@@ -7,9 +7,15 @@ import {
   CommentOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import LikesModal from "../Feed/LikesModal";
 
 class ProfilePostModal extends Component {
-  state = {};
+  state = { modalVisible: false, openPostId: null, openPostUserId: null };
+
+  handleOnCancel = () => {
+    this.setState({ modalVisible: false, openPostId: null });
+  };
+
   render() {
     return (
       <Modal
@@ -27,7 +33,12 @@ class ProfilePostModal extends Component {
               src={`${server}/files/${this.props?.post?.image}`}
               height="500"
               width="500"
-              //className="profile-post"
+              onDoubleClick={() => {
+                this.props.handleLike(
+                  this.props?.post?.postId,
+                  this.props?.post?.userId
+                );
+              }}
             />
           </Col>
           <Col md={10}>
@@ -147,6 +158,23 @@ class ProfilePostModal extends Component {
                   }
                 />
               )}
+              <span
+                style={{ marginLeft: "5px", cursor: "pointer" }}
+                onClick={() => {
+                  this.props?.post?.likedBy?.length !== 0 &&
+                    this.setState(
+                      {
+                        openPostId: this.props?.post?.postId,
+                        openPostUserId: this.props?.post?.userId,
+                      },
+                      () => {
+                        this.setState({ modalVisible: true });
+                      }
+                    );
+                }}
+              >
+                {this.props?.post?.likedBy?.length} likes
+              </span>
             </div>
             <div>
               <input
@@ -186,6 +214,14 @@ class ProfilePostModal extends Component {
             </div>
           </Col>
         </Row>
+        {this.state.openPostId !== null ? (
+          <LikesModal
+            modalVisible={this.state.modalVisible}
+            handleOnCancel={this.handleOnCancel}
+            openPostId={this.state.openPostId}
+            openPostUserId={this.state.openPostUserId}
+          />
+        ) : null}
       </Modal>
     );
   }

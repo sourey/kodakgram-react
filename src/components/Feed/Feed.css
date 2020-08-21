@@ -19,3 +19,16 @@
   padding: 5px 5px;
   text-decoration: underline;
 }
+
+.spin-center {
+  display: block !important;
+  position: fixed !important;
+  z-index: 1031; /* High z-index so it is on top of the page */
+  top: 50%;
+  left: 45%;
+}
+
+::-webkit-scrollbar {
+  width: 0px; /* Remove scrollbar space */
+  background: transparent; /* Optional: just make scrollbar invisible */
+}

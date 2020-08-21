@@ -1,20 +1,40 @@
 import React, { Component } from "react";
-import { Row, Col, Modal, Avatar, Button, Skeleton } from "antd";
-import { server } from "../../utils/Constants";
+import { Modal, Skeleton, Row, Col, Avatar, Button } from "antd";
+import { axiosPost } from "../../utils/AxiosApi";
+import { URL, server } from "../../utils/Constants";
+import { Link } from "react-router-dom";
 import {
   UserOutlined,
   CheckOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
-import { Link } from "react-router-dom";
 
-class StatModal extends Component {
+class LikesModal extends Component {
+  state = {
+    likers: [],
+    likersDataLoading: true,
+  };
+
+  componentDidMount() {
+    this.getPostLikers();
+  }
+
+  getPostLikers = () => {
+    const param = {
+      postId: this.props.openPostId,
+      userId: this.props.openPostUserId,
+    };
+    axiosPost(URL.getPostLikers, param, (response) => {
+      this.setState({ likers: response.data.likers, likersDataLoading: false });
+    });
+  };
+
   render() {
     return (
       <Row>
         <Col md={24}>
           <Modal
-            title={<strong>{this.props.title}</strong>}
+            title={"Likes"}
             centered
             visible={this.props.modalVisible}
             footer={null}
@@ -29,7 +49,7 @@ class StatModal extends Component {
                   height: "450px",
                 }}
               >
-                {this.props.modalData.map((data) => (
+                {this.state.likers.map((liker) => (
                   <Row
                     style={{
                       padding: "5px 5px",
@@ -39,48 +59,62 @@ class StatModal extends Component {
                     <Col md={3}>
                       <Link
                         to={{
-                          pathname: `/profile/${data.username}`,
+                          pathname: `/profile/${liker.username}`,
                         }}
                         onClick={this.props.handleModalVisible}
                       >
-                        {data.profilePictureUrl !== "" ? (
+                        {liker.profilePictureUrl !== "" ? (
                           <Avatar
-                            src={`${server}/files/${data?.profilePictureUrl}`}
+                            src={`${server}/files/${liker?.profilePictureUrl}`}
                             style={{ cursor: "pointer" }}
                           />
                         ) : (
                           <Avatar
                             icon={<UserOutlined />}
-                            style={{ cursor: "pointer" }}
+                            size={37}
+                            style={{
+                              cursor: "pointer",
+                              backgroundColor: "#376e6f",
+                            }}
                           />
                         )}
                       </Link>
                     </Col>
-                    <Col md={12} style={{ marginTop: "2px" }}>
+                    <Col md={12}>
                       <Link
                         to={{
-                          pathname: `/profile/${data.username}`,
+                          pathname: `/profile/${liker.username}`,
                         }}
                         onClick={this.props.handleModalVisible}
                       >
-                        <span style={{ marginLeft: "15px", fontSize: "16px" }}>
-                          <strong>{data.username}</strong>
+                        <span
+                          style={{
+                            marginLeft: "15px",
+                            fontSize: "16px",
+                            display: "flex",
+                            marginTop: "3px",
+                          }}
+                        >
+                          <strong>{liker.username}</strong>
                         </span>
                       </Link>
                     </Col>
-                    {data.userId === localStorage.getItem("userId") ? null : (
+                    {liker.userId === localStorage.getItem("userId") ? null : (
                       <Col md={8}>
                         {localStorage
                           .getItem("following")
-                          .indexOf(data.userId) !== -1 ? (
+                          .indexOf(liker.userId) !== -1 ? (
                           <Button
                             type="primary"
+                            style={{
+                              backgroundColor: "#376e6f",
+                              borderColor: "#376e6f",
+                            }}
                             icon={<CheckOutlined />}
                             shape="round"
-                            className="follow-button"
                             disabled={this.props.buttonDisabled}
                             onClick={() =>
-                              this.props.handleUnFollow(data.userId)
+                              this.props.handleUnFollow(liker.userId)
                             }
                           >
                             Following
@@ -88,12 +122,16 @@ class StatModal extends Component {
                         ) : (
                           <Button
                             type="primary"
-                            style={{ padding: "0px 26px" }}
+                            style={{
+                              backgroundColor: "#376e6f",
+                              borderColor: "#376e6f",
+                            }}
                             icon={<UserAddOutlined />}
                             shape="round"
-                            className="follow-button"
                             disabled={this.props.buttonDisabled}
-                            onClick={() => this.props.handleFollow(data.userId)}
+                            onClick={() =>
+                              this.props.handleFollow(liker.userId)
+                            }
                           >
                             Follow
                           </Button>
@@ -108,7 +146,7 @@ class StatModal extends Component {
                   paragraph={{ rows: 0 }}
                   active={true}
                   title={{ width: "250px" }}
-                  loading={this.props.modalDataLoading}
+                  loading={this.state.likersDataLoading}
                 />
               </Col>
             </Row>
@@ -119,4 +157,4 @@ class StatModal extends Component {
   }
 }
 
-export default StatModal;
+export default LikesModal;

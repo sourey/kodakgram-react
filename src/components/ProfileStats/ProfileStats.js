@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col, message } from "antd";
+import { Row, Col, message, Skeleton } from "antd";
 import { axiosPost } from "./../../utils/AxiosApi";
 import { URL } from "../../utils/Constants";
 import { withRouter } from "react-router-dom";
@@ -14,6 +14,7 @@ class ProfileStats extends Component {
     modalData: [],
     title: "",
     buttonDisabled: false,
+    modalDataLoading: true,
   };
 
   componentDidMount() {
@@ -55,7 +56,11 @@ class ProfileStats extends Component {
   }
 
   handleOnCancel = () => {
-    this.setState({ modalVisible: false, modalData: [] });
+    this.setState({
+      modalVisible: false,
+      modalData: [],
+      modalDataLoading: true,
+    });
   };
 
   getFollowing = () => {
@@ -74,7 +79,7 @@ class ProfileStats extends Component {
       };
     }
     axiosPost(URL.getFollowing, param, (response) => {
-      this.setState({ modalData: response.data });
+      this.setState({ modalData: response.data, modalDataLoading: false });
     });
   };
 
@@ -94,7 +99,7 @@ class ProfileStats extends Component {
       };
     }
     axiosPost(URL.getFollowers, param, (response) => {
-      this.setState({ modalData: response.data });
+      this.setState({ modalData: response.data, modalDataLoading: false });
     });
   };
 
@@ -141,28 +146,39 @@ class ProfileStats extends Component {
   render() {
     return (
       <Row style={{ marginLeft: "20px", marginTop: "25px" }}>
-        <Col md={8}>{this.state.stats?.numberOfPosts} posts</Col>
-        <Col
-          md={8}
-          style={{ cursor: "pointer" }}
-          onClick={() => {
-            this.getFollowing();
-            this.setState({ modalVisible: true, title: "Following" });
-          }}
-        >
-          {this.state.stats?.numberOfFollowing} following
-        </Col>
-        <Col
-          md={8}
-          onClick={() => {
-            this.getFollowers();
-            this.setState({ modalVisible: true, title: "Followers" });
-          }}
-          style={{ cursor: "pointer" }}
-        >
-          {this.state.stats?.numberOfFollowers} followers
-        </Col>
+        {Object.keys(this.state.stats).length === 0 ? (
+          <Skeleton
+            paragraph={{ rows: 0 }}
+            active={true}
+            title={{ width: "350px" }}
+          />
+        ) : (
+          <>
+            <Col md={8}>{this.state.stats?.numberOfPosts} posts</Col>
+            <Col
+              md={8}
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                this.getFollowing();
+                this.setState({ modalVisible: true, title: "Following" });
+              }}
+            >
+              {this.state.stats?.numberOfFollowing} following
+            </Col>
+            <Col
+              md={8}
+              onClick={() => {
+                this.getFollowers();
+                this.setState({ modalVisible: true, title: "Followers" });
+              }}
+              style={{ cursor: "pointer" }}
+            >
+              {this.state.stats?.numberOfFollowers} followers
+            </Col>
+          </>
+        )}
         <StatModal
+          modalDataLoading={this.state.modalDataLoading}
           handleOnCancel={this.handleOnCancel}
           modalVisible={this.state.modalVisible}
           title={this.state.title}
