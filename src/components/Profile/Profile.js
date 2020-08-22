@@ -16,6 +16,8 @@ class Profile extends Component {
     userId: null,
     comment: "",
     postLoading: true,
+    postsLength: 0,
+    page: 1,
   };
 
   componentDidMount() {
@@ -77,17 +79,25 @@ class Profile extends Component {
     if (this.props?.location?.state?.userId) {
       param = {
         userId: this.props.location.state.userId,
+        page: this.state.page,
       };
       this.callPost(param);
     } else if (this.props?.match?.params?.username) {
       param = {
         userId: this.state.userId,
+        page: this.state.page,
       };
       this.callPost(param);
     } else {
-      param = { userId: localStorage.getItem("userId") };
+      param = { userId: localStorage.getItem("userId"), page: this.state.page };
       this.callPost(param);
     }
+  };
+
+  getNextPosts = () => {
+    this.setState({ page: this.state.page + 1 }, () => {
+      this.getPosts();
+    });
   };
 
   callPost = (param) => {
@@ -96,7 +106,11 @@ class Profile extends Component {
       param,
       (response) => {
         if (response.status === 200) {
-          this.setState({ posts: response.data, postLoading: false });
+          this.setState({
+            posts: response.data.posts,
+            postLoading: false,
+            postsLength: response.data.length,
+          });
         }
       },
       (error) => {
