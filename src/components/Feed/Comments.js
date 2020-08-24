@@ -63,6 +63,7 @@ class Comments extends Component {
             marginLeft: "57px",
             marginBottom: "10px",
             marginTop: "10px",
+            borderColor: "rgb(141 142 142)",
           }}
           placeholder="write a comment"
           onKeyPress={(e) =>

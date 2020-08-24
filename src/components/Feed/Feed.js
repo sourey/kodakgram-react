@@ -1,16 +1,6 @@
 import React, { Component } from "react";
 import "./Feed.css";
-import {
-  Row,
-  Col,
-  Card,
-  Avatar,
-  message,
-  Popconfirm,
-  Skeleton,
-  Spin,
-  Empty,
-} from "antd";
+import { Row, Col, Card, Avatar, message, Popconfirm, Spin } from "antd";
 import {
   CommentOutlined,
   HeartOutlined,
@@ -20,7 +10,7 @@ import {
 } from "@ant-design/icons";
 import CreatePost from "./../CreatePost/CreatePost";
 import { axiosPost } from "./../../utils/AxiosApi";
-import { URL, server } from "../../utils/Constants";
+import { URL, server, dateDiffInDays } from "../../utils/Constants";
 import Followers from "./../Followers/Followers";
 import Comments from "./Comments";
 import { Link } from "react-router-dom";
@@ -241,7 +231,7 @@ class Feed extends Component {
                             />
                           ) : (
                             <Avatar
-                              size={40}
+                              size={50}
                               icon={<UserOutlined />}
                               style={{
                                 color: "#FFFFFF",
@@ -258,6 +248,25 @@ class Feed extends Component {
                           >
                             <span className="username">@{post.username}</span>
                           </Link>
+                          <div
+                            style={{
+                              fontSize: "10px",
+                              marginLeft: "60px",
+                              position: "absolute",
+                              top: "43px",
+                              color: "rgb(141 142 142)",
+                            }}
+                          >
+                            {dateDiffInDays(
+                              new Date(post.createdAt),
+                              new Date()
+                            ) > 1
+                              ? `${dateDiffInDays(
+                                  new Date(post.createdAt),
+                                  new Date()
+                                )} days ago`
+                              : "Today"}
+                          </div>
                         </>
                       }
                       id={idx}

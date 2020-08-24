@@ -14,7 +14,7 @@
 }
 .username {
   position: relative;
-  top: 2px;
+  top: -3px;
   margin-left: 5px;
   padding: 5px 5px;
   text-decoration: underline;
@@ -31,4 +31,8 @@
 ::-webkit-scrollbar {
   width: 0px; /* Remove scrollbar space */
   background: transparent; /* Optional: just make scrollbar invisible */
+}
+
+::placeholder {
+  color: rgba(141, 142, 142) !important;
 }

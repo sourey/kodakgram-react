@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Modal, Row, Col, Avatar } from "antd";
-import { server } from "../../utils/Constants";
+import { server, dateDiffInDays } from "../../utils/Constants";
 import {
   HeartFilled,
   HeartOutlined,
@@ -67,6 +67,23 @@ class ProfilePostModal extends Component {
                     >
                       <strong>{this.props?.post?.username}</strong>
                     </div>
+                    <div
+                      style={{
+                        fontSize: "10px",
+                        marginLeft: "-15px",
+                        color: "rgb(141 142 142)",
+                      }}
+                    >
+                      {dateDiffInDays(
+                        new Date(this.props?.post?.createdAt),
+                        new Date()
+                      ) > 1
+                        ? `${dateDiffInDays(
+                            new Date(this.props?.post?.createdAt),
+                            new Date()
+                          )} days ago`
+                        : "Today"}
+                    </div>
                   </Col>
                 </Row>
               </Col>
@@ -115,7 +132,7 @@ class ProfilePostModal extends Component {
             <hr
               style={{
                 marginLeft: "5px",
-                marginTop: "5px",
+                marginTop: "1px",
                 color: "#000",
                 backgroundColor: "#efe1e1",
                 border: "none",
@@ -129,7 +146,6 @@ class ProfilePostModal extends Component {
                 <HeartFilled
                   style={{
                     fontSize: "20px",
-                    marginTop: "2px",
                     padding: "2px 2px",
                     cursor: "pointer",
                     color: "#eb2f96",
@@ -145,7 +161,6 @@ class ProfilePostModal extends Component {
                 <HeartOutlined
                   style={{
                     fontSize: "20px",
-                    marginTop: "2px",
                     padding: "2px 2px",
                     cursor: "pointer",
                     color: "#eb2f96",
@@ -184,7 +199,7 @@ class ProfilePostModal extends Component {
                 style={{
                   borderColor: "#CCCCCC",
                   width: "90%",
-                  marginTop: "10px",
+                  marginTop: "5px",
                   fontSize: "14px",
                 }}
                 placeholder="add a comment"
