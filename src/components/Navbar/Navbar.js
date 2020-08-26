@@ -3,6 +3,7 @@ import "./Navbar.css";
 import { HomeOutlined, UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Row, Col, Menu, Dropdown } from "antd";
 import { Link } from "react-router-dom";
+import Notification from "./Notification";
 
 class Navbar extends Component {
   state = {};
@@ -59,11 +60,14 @@ class Navbar extends Component {
             <span className="logo-text">KodakGram</span>
           </Link>
         </Col>
-        <Col md={8}></Col>
-        <Col md={8}>
+        <Col md={4}></Col>
+        <Col md={12}>
           <span className="nav-profile">
             <Row>
-              <Col md={8} style={{ marginRight: "15px" }}>
+              <Col md={8} style={{ marginRight: "12px" }}>
+                <Notification />
+              </Col>
+              <Col md={8} style={{ marginRight: "10px" }}>
                 <Link to="/feed" className="menu-item">
                   <HomeOutlined
                     style={{
@@ -76,7 +80,7 @@ class Navbar extends Component {
                   />
                 </Link>
               </Col>
-              <Col md={8}>
+              <Col md={4}>
                 <Dropdown overlay={this.renderMenu()}>
                   <UserOutlined
                     style={{
@@ -87,10 +91,8 @@ class Navbar extends Component {
                     }}
                     className="hover-icon"
                   />
-                  {/* </a> */}
                 </Dropdown>
               </Col>
-              <Col md={8}></Col>
             </Row>
           </span>
         </Col>

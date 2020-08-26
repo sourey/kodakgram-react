@@ -47,3 +47,29 @@
 .menu-item:hover {
   color: black !important;
 }
+
+.notification-title {
+  padding: 5px 35px;
+  color: white;
+}
+.ant-popover-title {
+  background-color: #0b5f61 !important;
+}
+
+.ant-popover-inner-content {
+  background-color: #0b5f61 !important;
+}
+
+.ant-popover-arrow {
+  border-top-color: #0b5f61 !important;
+  border-left-color: #0b5f61 !important;
+}
+.notification-content {
+  padding: 5px 5px;
+  color: white;
+  height: 300px;
+}
+
+.ant-popover {
+  position: fixed;
+}
