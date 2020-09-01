@@ -49,7 +49,7 @@ const Notification = () => {
               )}
             </Col>
             <Col md={20} style={{ marginTop: "5px", wordSpacing: "4px" }}>
-              <span>{notification.username}</span>
+              <span style={{ marginLeft: "4px" }}>{notification.username}</span>
               <span style={{ marginLeft: "4px" }}>
                 {notification.type === "follow"
                   ? "followed you."
