@@ -1,5 +1,6 @@
 Deployed at:
 https://kodakgram-react.herokuapp.com/
+note: the app may take more than 20 seconds to load due to cold start of heroku server
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
