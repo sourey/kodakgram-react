@@ -9,7 +9,7 @@
     "@testing-library/user-event": "^7.1.2",
     "antd": "^4.4.3",
     "antd-img-crop": "^3.9.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-infinite-scroll-component": "^5.0.5",
